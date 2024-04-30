@@ -1,0 +1,35 @@
+-- Criação do botão que alterna entre invisível e visível
+local screenGui = Instance.new("ScreenGui")
+local toggleButton = Instance.new("ImageButton", screenGui)
+toggleButton.Image = "rbxassetid://11377135" -- Substitua pelo asset id da imagem do botão
+toggleButton.Size = UDim2.new(0, 50, 0, 50)
+toggleButton.Position = UDim2.new(0.5, -25, 0, 0) -- No meio da tela e em cima
+toggleButton.BackgroundTransparency = 1 -- Torna o fundo transparente
+
+-- Função para alternar a visibilidade do personagem
+local function toggleVisibility()
+    local character = game.Players.LocalPlayer.Character
+    local currentTransparency = character.HumanoidRootPart.Transparency
+    if currentTransparency == 0 then
+        -- Torna o personagem invisível para os outros jogadores
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") then
+                part.Transparency = 1
+                part.LocalTransparencyModifier = 0.5 -- 50% transparente para o jogador local
+            end
+        end
+    else
+        -- Restaura a visibilidade do personagem para todos os jogadores
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") then
+                part.Transparency = 0
+                part.LocalTransparencyModifier = 0
+            end
+        end
+    end
+end
+
+-- Evento de clique do botão
+toggleButton.MouseButton1Click:Connect(toggleVisibility)
+
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
